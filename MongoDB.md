@@ -7,18 +7,19 @@
 - See https://docs.mongodb.org/manual/core/master-slave/ if your deployment requires more nodes
 - Note: master-slave replication lacks the automatic failover capabilities
 
-### Data bearing nodes
+### Basics
+#### Data bearing nodes
 
-#### Primary
+##### Primary
 - Receives all write operations
 - MongoDB applies write operations on it and then records the operations on the primary's oplog
 
-#### Secondaries
+##### Secondaries
 - Replicate primary's oplog and apply the operations to their data set in an asynchronous process
 - If the primary is unavailable, an eligible secondary will hold an election to elect itself the new primary
 - Specific purpose configuration: https://docs.mongodb.org/manual/core/replica-set-secondary/
 
-### Arbiter node
+#### Arbiter node
 - Arbiters do not keep a copy of the data and cannot become a primary
 - Arbiters play a role in the elections that select a primary if the current primary is unavailable
 - Can add a vote in elections : arbiters have exactly 1 vote election
@@ -30,26 +31,21 @@
 - If you add an arbiter to a set with an odd number of members, the set may suffer from tied elections
 - See https://docs.mongodb.org/manual/tutorial/add-replica-set-arbiter/ to add an arbiter to a replica set
 
-### Automatic failover
+#### Automatic failover
 - When a primary does not communicate with the other members of the set for more than 10 seconds
 - An eligible secondary will hold an election to elect itself the new primary
 - See https://docs.mongodb.org/manual/core/replica-set-elections/ for more details
 
-### Read Operations
+#### Read Operations
 - All members of the replica set can accept read operations
 - By default, clients directs its read operations to the primary
 - See https://docs.mongodb.org/manual/core/read-preference/Clients for changing the default read behavior
 
-### Replica set requirements
+#### Requirements
 - The minimum requirements: A primary, a secondary, and an arbiter
 - Most deployments, however, will keep three members that store data: A primary and two secondary members
 
-## Replica set deployment and common architectures
-- The standard deployment for production system is a three-member replica set
-- It provides redundancy and fault tolerance
-- It avoids complexity when possible, but let your application requirements dictate the architecture
-
-### Strategies
+### Deployment strategies
 
 #### Number of members
 - Deploy an odd number of members (e.g. 1 primary, 2 secondaries)
@@ -85,3 +81,20 @@
 - Tag sets also allow the routing of read operations to specific machines
 - See: https://docs.mongodb.org/manual/core/replica-set-architectures/#target-operations-with-tag-sets
 
+#### Use journaling to protect against power failures
+- Enable journaling to protect data against service interruptions
+- Without journaling MongoDB cannot recover data after unexpected shutdowns, including power failures and unexpected reboots
+- All 64-bit versions of MongoDB after version 2.0 have journaling enabled by default.
+
+### Common architectures
+- The standard deployment for production system is a three-member replica set: https://docs.mongodb.org/manual/core/replica-set-architecture-three-members/
+- It provides redundancy and fault tolerance
+- It avoids complexity when possible, but let your application requirements dictate the architecture
+- More deployment patterns: https://docs.mongodb.org/manual/core/replica-set-architectures/#deployment-patterns
+
+### High availability
+- Failover allows a secondary member to become primary if the current primary becomes unavailable
+- To support effective failover, ensure that one facility can elect a primary if needed
+- Choose the facility that hosts the core application systems to host the majority of the replica set
+- Place a majority of voting members and all the members that can become primary in this facility
+- Otherwise, network partitions could prevent the set from being able to form a majority
