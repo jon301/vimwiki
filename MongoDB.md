@@ -24,7 +24,7 @@
 - Can add a vote in elections : arbiters have exactly 1 vote election
 - Allow replica sets to have an uneven number of members
 - Respond to heartbeat and election requests by other replica set members
-- Cheap resource cost
+- Cheap resource cost: you may run an arbiter on an application server or other shared process
 - Important : Do not run an arbiter on systems that also host the primary or the secondary members of the replica set
 - Only add an arbiter to sets with even numbers of members
 - If you add an arbiter to a set with an odd number of members, the set may suffer from tied elections
@@ -43,4 +43,45 @@
 ### Replica set requirements
 - The minimum requirements: A primary, a secondary, and an arbiter
 - Most deployments, however, will keep three members that store data: A primary and two secondary members
+
+## Replica set deployment and common architectures
+- The standard deployment for production system is a three-member replica set
+- It provides redundancy and fault tolerance
+- It avoids complexity when possible, but let your application requirements dictate the architecture
+
+### Strategies
+
+#### Number of members
+- Deploy an odd number of members (e.g. 1 primary, 2 secondaries)
+- Ensures that the replica set is always able to elect a primary
+- If you have an even number of members, add an arbiter to get an odd number
+
+#### Consider fault tolerance
+- See: https://docs.mongodb.org/manual/core/replica-set-architectures/#consider-fault-tolerance
+
+#### Use hidden and delayed members for dedicated functions
+- Dedicated functions such as backup or reporting
+- See: https://docs.mongodb.org/manual/core/replica-set-architectures/#use-hidden-and-delayed-members-for-dedicated-functions
+
+#### Load balance on read-heavy deployments
+- In a deployment with very high read traffic, you can improve read throughput by distributing reads to secondary members
+- As your deployment grows, add or move members to alternate data centers to improve redundancy and availability
+- Always ensure that the main facility is able to elect a primary
+
+#### Add capacity ahead of demand
+- The existing members of a replica set must have spare capacity to support adding a new member
+- Always add new members before the current demand saturates the capacity of the set
+
+#### Distribute members geographically
+- To protect your data if your main data center fails, keep at least one member in an alternate data center
+- Set these members’ `members[n].priority` to 0 to prevent them from becoming primary
+
+#### Keep a majority of members in one location
+- When a replica set has members in multiple data centers, network partitions can prevent communication between data centers
+- To ensure that the replica set members can confirm a majority and elect a primary, keep a majority of the set’s members in one location
+
+#### Target operations with tag sets
+- Use replica set tag sets to ensure that operations replicate to specific data centers
+- Tag sets also allow the routing of read operations to specific machines
+- See: https://docs.mongodb.org/manual/core/replica-set-architectures/#target-operations-with-tag-sets
 
