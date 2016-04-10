@@ -8,6 +8,7 @@
 - Note: master-slave replication lacks the automatic failover capabilities
 
 ### Basics
+
 #### Data bearing nodes
 
 ##### Primary
@@ -98,3 +99,11 @@
 - Choose the facility that hosts the core application systems to host the majority of the replica set
 - Place a majority of voting members and all the members that can become primary in this facility
 - Otherwise, network partitions could prevent the set from being able to form a majority
+
+### Elections
+- Elections occur after initiating a replica set, and also any time the primary becomes unavailable
+- If a primary becomes unavailable, elections allow the set to recover normal operations without manual intervention (automatic failover process)
+- Elections take time to complete
+- While an election is in process, the replica set has no primary and cannot accept writes and all remaining members become read-only
+
+ https://docs.mongodb.org/manual/core/replica-set-elections/#factors-and-conditions-that-affect-elections
