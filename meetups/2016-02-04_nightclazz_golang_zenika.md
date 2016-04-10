@@ -1,4 +1,4 @@
-# Meetup NightClazz Golang @ Zenika (2015-02-04)
+# Meetup NightClazz Golang @ Zenika (2016-02-04)
 
 ## Go
 

@@ -611,6 +611,3 @@ Like links, Images also have a footnote style syntax
 With a reference later in the document defining the URL location:
 
 [id]: http://octodex.github.com/images/dojocat.jpg  "The Dojocat"
-
-
-    [id]: http://octodex.github.com/images/dojocat.jpg  "The Dojocat"

@@ -1,14 +1,13 @@
 # JonJon301 Wiki
 
-## Cheatsheet
-- [[Markdown]](Markdown.md)
-
-## Notes
-- [[Docker]](Docker.md)
-- [[MongoDB]](MongoDB.md)
-- [[Freelance]](Freelance.md)
+## Technical Notes
+- [Markdown Cheatsheet](notes/markdown.md)
+- [MongoDB](notes/mongodb.md)
+- [Freelance](notes/freelance.md)
 
 ## Meetups
-- [[Meetup 2016-02-04 - Nightclazz Golang @ Zenika]](Meetup 2016-02-04 - Nightclazz Golang @ Zenika.md)
-- [[Meetup 2016-03-16 - Microsoft Tech Days @ Microsoft]](Meetup 2016-03-16 - Microsoft Tech Days @ Microsoft.md)
+- [2016-02-04 - Nightclazz Golang @ Zenika](meetups/2016-02-04_nightclazz_golang_zenika.md)
+- [2016-03-16 - Microsoft Tech Days @ Microsoft](meetups/2016-03-16_microsoft_techdays.md)
 
+## Miscellaneous
+- [Blog Subject Ideas](misc/blog_subject_ideas.md)
